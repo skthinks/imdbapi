@@ -17,7 +17,6 @@ Instructions to use
 http://localhost:8000/polls/suggest/?q=($movie name)
 
 3. Then:
-Either Click the Link near the Movie
-Or
+Use the ID matching the movie to get the result
 http://localhost:8000/polls/suggest/?q=($movie id)
 
