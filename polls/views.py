@@ -22,10 +22,10 @@ def index(request):
     req = get_search_param(request)
     if req == "":
         return JsonResponse({'Error':"Information request cannot be fulfilled"})
-    movie_ids, movie_names = search.get_movie_names(req)
+    movie_ids, movie_summaries = search.get_movie_names(req)
     if movie_ids == []:
         return JsonResponse({'Error': "No Movies could be Found"})
-    movie_tuple = zip(movie_ids, movie_names)
+    movie_tuple = zip(movie_ids, movie_summaries)
     movie_objects = []
     for tup in movie_tuple:
         link = make_link(tup[0])

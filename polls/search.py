@@ -39,9 +39,6 @@ def get_movie_names(movie_name):
     summary = []
     movie_name_list = []
     for movie_id in movie_id_list:
-        movie_name = get_name_of_movie(movie_id)
-        movie_name = movie_name.replace("<title>", "").replace("- IMDb", "")
-        movie_name_list.append(movie_name) 
         movie_summary = get_mini_of_movie(movie_id)
         summary.append(movie_summary)
     return movie_id_list, summary
