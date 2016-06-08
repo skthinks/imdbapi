@@ -46,6 +46,6 @@ def display_info(request):
     '''ans = request.GET.get('q', None)
     if ans is None or ans ==  "":
         return JsonResponse({'Error': "Information request cannot be fulfilled"})
-    ans = re.search(r'tt[0-9]+', ans).group()'''
-    movie_info = search.get_info_on_movie(ans)
+    ans = re.search(r'tt[0-9]+', ans).group()
+    movie_info = search.get_info_on_movie(ans)'''
     return JsonResponse(movie_info)
