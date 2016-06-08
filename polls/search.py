@@ -6,7 +6,7 @@ from more_itertools import unique_everseen
 import imdb_url
 
 def get_possible_movie_ids(movie_name):
-    url = "%s%s&s=all" %(imdb_url.id_url, movie_name)
+    url = "%s%s&s=all" % (imdb_url.id_url, movie_name)
     r = requests.get(url)
     movie_id = re.findall(r'tt[0-9]+', r.text, re.M)
     if not movie_id:
@@ -16,7 +16,7 @@ def get_possible_movie_ids(movie_name):
 
 
 def get_name_of_movie(movie_id):
-    url = "%s%s/?ref_=fn_al_tt_1" %(imdb_url.name_url, movie_id)
+    url = "%s%s/?ref_=fn_al_tt_1" % (imdb_url.name_url, movie_id)
     r = requests.get(url)
     movie_name = re.search(r'<title>.*IMDb', r.text)
     return movie_name.group()

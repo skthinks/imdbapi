@@ -1,9 +1,6 @@
 import re
 
-import json
-from django.shortcuts import render
 from django.http import JsonResponse
-from django.http import HttpResponse
 
 import search
 import imdb_url
@@ -11,17 +8,28 @@ import imdb_url
 
 
 def make_link(movie_id):
-    link = "%s%s" %(imdb_url.query_url, movie_id) 
+    link = "%s%s" % (imdb_url.query_url, movie_id) 
     return link
+
+def get_search_param(req):
+    req = str(req)
+    req = req.replace('>',"").replace("'","").replace('>',"")
+    req = req.split('/')
+    return req[len(req) - 1]
 
 
 def index(request):
-    ans = request.GET.get('q', None)
+    req = get_search_param(request)
+    print req
+    if req == "":
+        return JsonResponse({'Error':"Information request cannot be fulfilled"})
+    movie_ids, movie_names = search.get_movie_names(req)
+    '''ans = request.GET.get('q', None)
     if ans is None or ans ==  "":
-        return HttpResponse("Information request cannot be fulfilled")
-    movie_ids, movie_names = search.get_movie_names(ans)
+        return JsonResponse({'Error': "Information request cannot be fulfilled"})
+    movie_ids, movie_names = search.get_movie_names(ans)'''
     if movie_ids == []:
-        return HttpResponse("No Movies could be Found")
+        return JsonResponse({'Error': "No Movies could be Found"})
     json_answer = {}
     movie_tuple = zip(movie_ids, movie_names)
     for tup in movie_tuple:
@@ -33,7 +41,7 @@ def index(request):
 def display_info(request):
     ans = request.GET.get('q', None)
     if ans is None or ans ==  "":
-        return HttpResponse("Information request cannot be fulfilled")
+        return JsonResponse({'Error': "Information request cannot be fulfilled"})
     ans = re.search(r'tt[0-9]+', ans).group()
     movie_info = search.get_info_on_movie(ans)
     return JsonResponse(movie_info)
