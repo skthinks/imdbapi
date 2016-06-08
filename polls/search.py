@@ -37,7 +37,6 @@ def get_movie_names(movie_name):
     if movie_id_list == []:
         return [],[]
     summary = []
-    movie_name_list = []
     for movie_id in movie_id_list:
         movie_summary = get_mini_of_movie(movie_id)
         summary.append(movie_summary)

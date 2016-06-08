@@ -1,4 +1,3 @@
-import re
 
 from django.http import JsonResponse
 
@@ -10,6 +9,7 @@ import imdb_url
 def make_link(movie_id):
     link = "%s%s" % (imdb_url.query_url, movie_id) 
     return link
+
 
 def get_search_param(req):
     req = str(req)
