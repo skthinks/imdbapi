@@ -116,7 +116,8 @@ def get_genres(r_text):
 
 
 def get_info_on_movie(movie_id):
-    url = "http://imdb.com/title/"+movie_id+"/?ref_=fn_al_tt_1"
+    # url = "http://imdb.com/title/"+movie_id+"/?ref_=fn_al_tt_1"
+    url = "%s%s/?ref_=fn_al_tt_1" % (imdb_url.name_url, movie_id)
     r = requests.get(url)
     movie = {}
     movie['Title'] = get_title(r.text)
