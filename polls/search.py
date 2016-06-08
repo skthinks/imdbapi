@@ -22,16 +22,29 @@ def get_name_of_movie(movie_id):
     return movie_name.group()
 
 
+def get_mini_of_movie(movie_id):
+    url = "%s%s/?ref_=fn_al_tt_1" %(imdb_url.name_url, movie_id)
+    r = requests.get(url)
+    movie_summary = {}
+    movie_summary['Title'] = get_title(r.text)
+    movie_summary['Genres'] = get_genres(r.text)
+    movie_summary['Rating'] = get_rating(r.text)
+    return movie_summary
+
+
 def get_movie_names(movie_name):
     movie_id_list = get_possible_movie_ids(movie_name)
     if movie_id_list == []:
         return [],[]
+    summary = []
     movie_name_list = []
     for movie_id in movie_id_list:
         movie_name = get_name_of_movie(movie_id)
         movie_name = movie_name.replace("<title>", "").replace("- IMDb", "")
         movie_name_list.append(movie_name) 
-    return movie_id_list, movie_name_list 
+        movie_summary = get_mini_of_movie(movie_id)
+        summary.append(movie_summary)
+    return movie_id_list, summary
 
 
 def get_title(r_text):
@@ -125,4 +138,4 @@ def main():
     get_movie_names(movie_search)
 
 
-# main()
+# main():
