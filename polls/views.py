@@ -23,10 +23,6 @@ def index(request):
     if req == "":
         return JsonResponse({'Error':"Information request cannot be fulfilled"})
     movie_ids, movie_names = search.get_movie_names(req)
-    '''ans = request.GET.get('q', None)
-    if ans is None or ans ==  "":
-        return JsonResponse({'Error': "Information request cannot be fulfilled"})
-    movie_ids, movie_names = search.get_movie_names(ans)'''
     if movie_ids == []:
         return JsonResponse({'Error': "No Movies could be Found"})
     json_answer = {}
@@ -39,13 +35,7 @@ def index(request):
 
 def display_info(request):
     req = get_search_param(request)
-    print req
     if req == "":
         return JsonResponse({'Error':"Information request cannot be fulfilled"})
     movie_info = search.get_info_on_movie(req)
-    '''ans = request.GET.get('q', None)
-    if ans is None or ans ==  "":
-        return JsonResponse({'Error': "Information request cannot be fulfilled"})
-    ans = re.search(r'tt[0-9]+', ans).group()
-    movie_info = search.get_info_on_movie(ans)'''
     return JsonResponse(movie_info)
