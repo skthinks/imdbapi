@@ -27,10 +27,13 @@ def index(request):
         return JsonResponse({'Error': "No Movies could be Found"})
     json_answer = {}
     movie_tuple = zip(movie_ids, movie_names)
+    movie_objects = []
     for tup in movie_tuple:
         link = make_link(tup[0])
+        tup[1]['Link'] = link
+        movie_objects.append(tup[1])
         json_answer[tup[1]] = link
-    return JsonResponse(json_answer) 
+    return JsonResponse(movie_objects, safe=False) 
 
 
 def display_info(request):
