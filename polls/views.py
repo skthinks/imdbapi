@@ -21,10 +21,10 @@ def get_search_param(req):
 def index(request):
     req = get_search_param(request)
     if req == "":
-        return JsonResponse({'Error':"Information request cannot be fulfilled"})
+        return JsonResponse({'Error Code':"400"})
     movie_ids, movie_summaries = search.get_movie_names(req)
     if movie_ids == []:
-        return JsonResponse({'Error': "No Movies could be Found"})
+        return JsonResponse({'Error Code': "404"})
     movie_tuple = zip(movie_ids, movie_summaries)
     movie_objects = []
     for tup in movie_tuple:
@@ -37,6 +37,8 @@ def index(request):
 def display_info(request):
     req = get_search_param(request)
     if req == "":
-        return JsonResponse({'Error':"Information request cannot be fulfilled"})
+        return JsonResponse({'Error Code':"400"})
     movie_info = search.get_info_on_movie(req)
+    if movie_info == {}:
+        return JsonResponse({'Error Code':"404"})
     return JsonResponse(movie_info)

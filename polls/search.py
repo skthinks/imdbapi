@@ -97,7 +97,7 @@ def get_actors(r_text):
 def get_duration(r_text):
     try:
         duration = re.search('[0-9]h [0-9]+min', r_text).group()
-    except:
+    except AttributeError:
         duration = "N/A"
     return duration
 
@@ -120,6 +120,8 @@ def get_info_on_movie(movie_id):
     r = requests.get(url)
     movie = {}
     movie['Title'] = get_title(r.text)
+    if movie['Title'] == "N/A":
+        return {}
     movie['Movie Rating'] = get_rating(r.text)
     movie['Release Year'] = get_year(r.text)
     movie['Director'] = get_directors(r.text)
@@ -128,10 +130,3 @@ def get_info_on_movie(movie_id):
     movie['Actors'] = get_actors(r.text)
     return movie
 
-
-def main():
-    movie_search = raw_input()
-    get_movie_names(movie_search)
-
-
-# main():
