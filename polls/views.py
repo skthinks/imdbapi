@@ -41,3 +41,7 @@ def display_info(request):
     if movie_info == {}:
         return JsonResponse({'Error Code': "404"})
     return JsonResponse(movie_info)
+
+
+def display_welcome(request):
+    return JsonResponse("Welcome", safe=False)
