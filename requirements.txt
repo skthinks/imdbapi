@@ -1,0 +1,6 @@
+requests==2.10.0
+Django==1.9.7
+gunicorn==19.6.0
+more_itertools==2.2
+BeautifulSoup==3.2.1
+mechanize==0.2.5
