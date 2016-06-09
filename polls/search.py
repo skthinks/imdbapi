@@ -123,11 +123,11 @@ def get_writers(soup):
     try:
         writers = list(soup.findAll("span", itemprop="creator"))
         writer = []
-        for dire in writers:
-            if "schema.org/Person" in str(dire):
-                direct = BeautifulSoup(str(dire))
-                directors = (direct.find("span", itemprop="name")).contents
-                writer.append(directors[0])
+        for writ in writers:
+            if "schema.org/Person" in str(writ):
+                direct = BeautifulSoup(str(writ))
+                writors = (direct.find("span", itemprop="name")).contents
+                writer.append(writors[0])
     except:
         writer = []
     return writer
