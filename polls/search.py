@@ -89,7 +89,7 @@ def get_actors(r_text):
     directors = []
     directors.append("N/A")
     try:
-        directors = re.search('Directed by .*', r_text).group() 
+        directors = re.search('Directed by .*', r_text).group( 
         directors = directors.split('With ')
         actors = re.match(r'(?:[^.:;]+[.:;]){1}', directors[1]).group()
     except:
@@ -118,15 +118,14 @@ def get_genres(r_text):
     return genres
 
 
-                        
 def get_writers(soup):
     try:
-        writers = list(soup.findAll("span",itemprop="creator"))
+        writers = list(soup.findAll("span", itemprop="creator"))
         writer = []
         for dire in writers:
             if "schema.org/Person" in str(dire):
                 direct = BeautifulSoup(str(dire))
-                directors= (direct.find("span", itemprop="name")).contents
+                directors = (direct.find("span", itemprop="name")).contents
                 writer.append(directors[0])
     except:
         writer = []
@@ -144,21 +143,21 @@ def get_rated(soup):
 def get_awards(soup):
     try:
         awards_list = list(soup.findAll("span", itemprop="awards"))
-        sentences =[]
+        sentences = []
         for award in awards_list:
             b = str(award)
-            b = b.replace("<b>","").replace("</b>","")
+            b = b.replace("<b>", "").replace("</b>", "")
             c = BeautifulSoup(b)
             d = c.find("span", itemprop="awards").contents
-            e = d[0].replace('\n',".")
-            f = e.replace("\t","").replace(".","")
+            e = d[0].replace('\n', ".")
+            f = e.replace("\t", "").replace(".", "")
             f = f.split()
             sentence = ' '.join(f)
             sentences.append(sentence)
         final_award = ' '.join(sentences)
     except:
             final_award = "N/A"
-        return final_award
+    return final_award
 
 
 def get_info_on_movie(movie_id):
