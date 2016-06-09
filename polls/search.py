@@ -1,9 +1,12 @@
 import re
 
 import requests
+from BeautifulSoup import BeautifulSoup
 from more_itertools import unique_everseen
 
+
 import imdb_url
+
 
 def get_possible_movie_ids(movie_name):
     url = "%s%s&s=all" % (imdb_url.id_url, movie_name)
@@ -23,7 +26,7 @@ def get_name_of_movie(movie_id):
 
 
 def get_mini_of_movie(movie_id):
-    url = "%s%s/?ref_=fn_al_tt_1" %(imdb_url.name_url, movie_id)
+    url = "%s%s/?ref_=fn_al_tt_1" % (imdb_url.name_url, movie_id)
     r = requests.get(url)
     movie_summary = {}
     movie_summary['Title'] = get_title(r.text)
@@ -35,7 +38,7 @@ def get_mini_of_movie(movie_id):
 def get_movie_names(movie_name):
     movie_id_list = get_possible_movie_ids(movie_name)
     if movie_id_list == []:
-        return [],[]
+        return [], []
     summary = []
     for movie_id in movie_id_list:
         movie_summary = get_mini_of_movie(movie_id)
@@ -86,9 +89,9 @@ def get_actors(r_text):
     directors = []
     directors.append("N/A")
     try:
-        directors = re.search('Directed by .*', r_text).group()  
+        directors = re.search('Directed by .*', r_text).group()
         directors = directors.split('With ')
-        actors = re.match(r'(?:[^.:;]+[.:;]){1}', directors[1]).group() 
+        actors = re.match(r'(?:[^.:;]+[.:;]){1}', directors[1]).group()
     except:
         actors = "N/A"
     return actors
@@ -115,9 +118,52 @@ def get_genres(r_text):
     return genres
 
 
+def get_writers(soup):
+    try:
+        writers = list(soup.findAll("span", itemprop="creator"))
+        writer = []
+        for writ in writers:
+            if "schema.org/Person" in str(writ):
+                direct = BeautifulSoup(str(writ))
+                writors = (direct.find("span", itemprop="name")).contents
+                writer.append(writors[0])
+    except:
+        writer = []
+    return writer
+
+
+def get_rated(soup):
+    try:
+        rated = soup.find("span", itemprop="contentRating").contents
+        return rated[0]
+    except:
+        return "N/A"
+
+
+def get_awards(soup):
+    try:
+        awards_list = list(soup.findAll("span", itemprop="awards"))
+        sentences = []
+        for award in awards_list:
+            b = str(award)
+            b = b.replace("<b>", "").replace("</b>", "")
+            c = BeautifulSoup(b)
+            d = c.find("span", itemprop="awards").contents
+            e = d[0].replace('\n', ".")
+            f = e.replace("\t", "").replace(".", "")
+            f = f.split()
+            sentence = ' '.join(f)
+            sentences.append(sentence)
+        final_award = ' '.join(sentences)
+    except:
+            final_award = "N/A"
+    return final_award
+
+
 def get_info_on_movie(movie_id):
-    url = "http://imdb.com/title/"+movie_id+"/?ref_=fn_al_tt_1"
+    url = "%s%s/?ref_=fn_al_tt_1" % (imdb_url.name_url, movie_id)
     r = requests.get(url)
+    soup = BeautifulSoup(r.text)
     movie = {}
     movie['Title'] = get_title(r.text)
     if movie['Title'] == "N/A":
@@ -128,5 +174,7 @@ def get_info_on_movie(movie_id):
     movie['Duration'] = get_duration(r.text)
     movie['Genres'] = get_genres(r.text)
     movie['Actors'] = get_actors(r.text)
+    movie['Writers'] = get_writers(soup)
+    movie['Awards'] = get_awards(soup)
+    movie['Rated'] = get_rated(soup)
     return movie
-
