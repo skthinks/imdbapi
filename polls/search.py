@@ -89,7 +89,7 @@ def get_actors(r_text):
     directors = []
     directors.append("N/A")
     try:
-        directors = re.search('Directed by .*', r_text).group( 
+        directors = re.search('Directed by .*', r_text).group()
         directors = directors.split('With ')
         actors = re.match(r'(?:[^.:;]+[.:;]){1}', directors[1]).group()
         actors = re.match(r'(?:[^.:;]+[.:;]){1}', directors[1]).group()
